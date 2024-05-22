@@ -1,4 +1,4 @@
-package graphRepresentations
+package myGraph
 
 type Edge struct {
 	start  int

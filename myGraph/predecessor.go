@@ -1,4 +1,4 @@
-package graphRepresentations
+package myGraph
 
 type Predecessor struct {
 	Vertex int

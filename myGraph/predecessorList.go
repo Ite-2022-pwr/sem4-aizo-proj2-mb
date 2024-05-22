@@ -1,4 +1,4 @@
-package graphRepresentations
+package myGraph
 
 type PredecessorList struct {
 	predecessorList [][]Predecessor // map[predecessor]weight
@@ -43,14 +43,14 @@ func (pl *PredecessorList) GetEdgeCount() (count int) {
 }
 
 func (pl *PredecessorList) IsAdjacent(vertexA, vertexB int) bool {
-	for i := 0; i < len(pl.predecessorList[vertexA]); i++ {
-		if pl.predecessorList[vertexA][i].Vertex == vertexB {
+	for i := 0; i < len(pl.predecessorList[vertexB]); i++ {
+		if pl.predecessorList[vertexB][i].Vertex == vertexA {
 			return true
 		}
 	}
 	if !pl.IsDirected() {
-		for i := 0; i < len(pl.predecessorList[vertexB]); i++ {
-			if pl.predecessorList[vertexB][i].Vertex == vertexA {
+		for i := 0; i < len(pl.predecessorList[vertexA]); i++ {
+			if pl.predecessorList[vertexA][i].Vertex == vertexB {
 				return true
 			}
 		}
@@ -59,8 +59,12 @@ func (pl *PredecessorList) IsAdjacent(vertexA, vertexB int) bool {
 }
 
 func (pl *PredecessorList) GetNeighbours(vertex int) (neighbours []int) {
-	for i := 0; i < len(pl.predecessorList[vertex]); i++ {
-		neighbours = append(neighbours, pl.predecessorList[vertex][i].Vertex)
+	for i := 0; i < pl.GetVertexCount(); i++ {
+		for j := 0; j < len(pl.predecessorList[i]); j++ {
+			if pl.predecessorList[i][j].Vertex == vertex {
+				neighbours = append(neighbours, i)
+			}
+		}
 	}
 	return neighbours
 }
@@ -103,6 +107,9 @@ func (pl *PredecessorList) GetEdge(start, end int) Edge {
 }
 
 func (pl *PredecessorList) AddEdge(start, end, weight int) {
+	if pl.IsAdjacent(start, end) {
+		panic("Edge already exists")
+	}
 	pl.predecessorList[end] = append(pl.predecessorList[end], Predecessor{Vertex: start, Weight: weight})
 	if !pl.IsDirected() {
 		pl.predecessorList[start] = append(pl.predecessorList[start], Predecessor{Vertex: end, Weight: weight})

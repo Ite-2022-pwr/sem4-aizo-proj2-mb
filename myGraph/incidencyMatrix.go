@@ -1,4 +1,6 @@
-package graphRepresentations
+package myGraph
+
+import "projekt2/utils"
 
 type IncidenceMatrix struct {
 	VertexEdgeMatrix [][]int
@@ -43,7 +45,7 @@ func (im *IncidenceMatrix) GetNeighbours(vertex int) (neighbours []int) {
 	for i := 0; i < im.GetEdgeCount(); i++ {
 		for j := 0; j < im.GetVertexCount(); j++ {
 			if im.VertexEdgeMatrix[j][i] != 0 && j != vertex {
-				if !im.IsDirected() {
+				if !im.IsDirected() && !utils.InListInt(neighbours, j) {
 					neighbours = append(neighbours, j)
 				} else {
 					if im.VertexEdgeMatrix[j][i] == -1 {

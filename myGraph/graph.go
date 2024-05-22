@@ -1,4 +1,4 @@
-package graphRepresentations
+package myGraph
 
 type Graph interface {
 	IsDirected() bool
