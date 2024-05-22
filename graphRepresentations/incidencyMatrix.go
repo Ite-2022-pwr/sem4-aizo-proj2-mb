@@ -72,22 +72,22 @@ func (im *IncidenceMatrix) RemoveVertex(vertex int) {
 	im.ClearBrokenEdges()
 }
 
-func (im *IncidenceMatrix) GetEdge(start, end int) int {
+func (im *IncidenceMatrix) GetEdge(start, end int) Edge {
 	for i := 0; i < im.GetEdgeCount(); i++ {
 		if im.IsDirected() {
 			if im.VertexEdgeMatrix[start][i] == -1 && im.VertexEdgeMatrix[end][i] == 1 {
-				return i
+				return Edge{start: start, end: end, weight: im.WeightsList[i]}
 			}
 		} else {
 			if im.VertexEdgeMatrix[start][i] != 0 && im.VertexEdgeMatrix[end][i] != 0 {
-				return i
+				return Edge{start: start, end: end, weight: im.WeightsList[i]}
 			}
 		}
 	}
-	return -1
+	return Edge{0, 0, 0}
 }
 
-func (im *IncidenceMatrix) AddEdge(start, end, weight int) int {
+func (im *IncidenceMatrix) AddEdge(start, end, weight int) {
 	if im.IsAdjacent(start, end) {
 		panic("Edge already exists")
 	}
@@ -102,20 +102,30 @@ func (im *IncidenceMatrix) AddEdge(start, end, weight int) int {
 		im.VertexEdgeMatrix[end][im.GetEdgeCount()] = 1
 	}
 	im.WeightsList = append(im.WeightsList, weight)
-	return len(im.WeightsList) - 1
 }
 
 func (im *IncidenceMatrix) RemoveEdge(start, end int) {
-	edge := im.GetEdge(start, end)
-	if edge == -1 {
-		panic("Edge does not exist")
-	}
 	tempVertexEdgeMatrix := make([][]int, 0)
 	tempWeightsList := make([]int, 0)
 	for i := 0; i < im.GetEdgeCount(); i++ {
-		if i != edge {
-			tempVertexEdgeMatrix = append(tempVertexEdgeMatrix, im.VertexEdgeMatrix[i])
+		thisStart := false
+		thisEnd := false
+		for j := 0; j < im.GetVertexCount(); j++ {
+			if im.VertexEdgeMatrix[j][i] == -1 && j == start {
+				thisStart = true
+			} else if im.VertexEdgeMatrix[j][i] == 1 && j == end {
+				thisEnd = true
+			} else if im.VertexEdgeMatrix[j][i] != 0 && !im.IsDirected() {
+				if !thisStart {
+					thisStart = true
+				} else {
+					thisEnd = true
+				}
+			}
+		}
+		if !thisStart && !thisEnd {
 			tempWeightsList = append(tempWeightsList, im.WeightsList[i])
+			tempVertexEdgeMatrix = append(tempVertexEdgeMatrix, im.VertexEdgeMatrix[i])
 		}
 	}
 	im.VertexEdgeMatrix = tempVertexEdgeMatrix
@@ -150,10 +160,29 @@ func (im *IncidenceMatrix) ClearBrokenEdges() {
 	im.WeightsList = tempWeightsList
 }
 
-func (im *IncidenceMatrix) GetEdgeWeight(edge int) int {
-	return im.WeightsList[edge]
+func (im *IncidenceMatrix) GetEdgeWeight(start, end int) int {
+	return im.GetEdge(start, end).weight
 }
 
-func (im *IncidenceMatrix) SetEdgeWeight(edge, weight int) {
-	im.WeightsList[edge] = weight
+func (im *IncidenceMatrix) SetEdgeWeight(start, end, weight int) {
+	for i := 0; i < im.GetEdgeCount(); i++ {
+		correctStart := false
+		correctEnd := false
+		for j := 0; j < im.GetVertexCount(); j++ {
+			if im.VertexEdgeMatrix[j][i] == -1 && j == start {
+				correctStart = true
+			} else if im.VertexEdgeMatrix[j][i] == 1 && j == end {
+				correctEnd = true
+			} else if im.VertexEdgeMatrix[j][i] != 0 && !im.IsDirected() {
+				if !correctStart {
+					correctStart = true
+				} else {
+					correctEnd = true
+				}
+			}
+		}
+		if correctStart && correctEnd {
+			im.WeightsList[i] = weight
+		}
+	}
 }

@@ -9,8 +9,8 @@ type Graph interface {
 	GetNeighbours() []int
 	AddVertex() int
 	RemoveVertex()
-	GetEdge() int
-	AddEdge() int
+	GetEdge() Edge
+	AddEdge()
 	RemoveEdge()
 	ClearBrokenEdges()
 	GetEdgeWeight() int
