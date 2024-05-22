@@ -135,7 +135,7 @@ func (im *IncidenceMatrix) RemoveEdge(start, end int) {
 }
 
 func (im *IncidenceMatrix) ClearBrokenEdges() {
-	tempVertexEdgeMatrix := make([][]int, 0)
+	tempVertexEdgeMatrix := make([][]int, im.GetVertexCount())
 	tempWeightsList := make([]int, 0)
 	for i := 0; i < im.GetEdgeCount(); i++ {
 		hasStart := false
@@ -154,7 +154,9 @@ func (im *IncidenceMatrix) ClearBrokenEdges() {
 			}
 		}
 		if hasStart && hasEnd {
-			tempVertexEdgeMatrix = append(tempVertexEdgeMatrix, im.VertexEdgeMatrix[i])
+			for j := 0; j < im.GetVertexCount(); j++ {
+				tempVertexEdgeMatrix[j] = append(tempVertexEdgeMatrix[j], im.VertexEdgeMatrix[j][i])
+			}
 			tempWeightsList = append(tempWeightsList, im.WeightsList[i])
 		}
 	}

@@ -6,15 +6,49 @@ import (
 )
 
 func main() {
-	graph := myGraph.GenerateGraphIncidenceMatrix(20, 10, true)
-	for i := 0; i < len(graph.VertexEdgeMatrix); i++ {
-		for j := 0; j < graph.GetEdgeCount(); j++ {
-			fmt.Printf("%3d", graph.VertexEdgeMatrix[i][j])
+	graph := myGraph.GeneratePredecessorListGraph(5, 100, true)
+	for i := 0; i < len(graph.PredecessorList); i++ {
+		for j := 0; j < len(graph.PredecessorList[i]); j++ {
+			fmt.Print(graph.PredecessorList[i][j], " ")
 		}
 		fmt.Println()
 	}
 	fmt.Println()
-	for i := 0; i < len(graph.WeightsList); i++ {
-		fmt.Printf("%3d", graph.WeightsList[i])
+
+	graph.RemoveVertex(3)
+
+	for i := 0; i < len(graph.PredecessorList); i++ {
+		for j := 0; j < len(graph.PredecessorList[i]); j++ {
+			fmt.Print(graph.PredecessorList[i][j], " ")
+		}
+		fmt.Println()
+	}
+	fmt.Println()
+
+	graph2 := myGraph.GenerateGraphIncidenceMatrix(5, 100, true)
+	for i := 0; i < len(graph2.VertexEdgeMatrix); i++ {
+		for j := 0; j < len(graph2.VertexEdgeMatrix[i]); j++ {
+			fmt.Printf("%3d", graph2.VertexEdgeMatrix[i][j])
+		}
+		fmt.Println()
+	}
+	fmt.Println()
+	for i := 0; i < len(graph2.WeightsList); i++ {
+		fmt.Printf("%3d", graph2.WeightsList[i])
+	}
+
+	fmt.Println()
+	graph2.RemoveVertex(0)
+	for i := 0; i < len(graph2.VertexEdgeMatrix); i++ {
+		for j := 0; j < len(graph2.VertexEdgeMatrix[i]); j++ {
+			fmt.Printf("%3d", graph2.VertexEdgeMatrix[i][j])
+		}
+		fmt.Println()
+
+	}
+
+	fmt.Println()
+	for i := 0; i < len(graph2.WeightsList); i++ {
+		fmt.Printf("%3d", graph2.WeightsList[i])
 	}
 }
