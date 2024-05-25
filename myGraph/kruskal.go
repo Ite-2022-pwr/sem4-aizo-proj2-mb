@@ -17,13 +17,9 @@ func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, er
 	for i := 0; i < len(sortedEdges); i++ {
 		start := sortedEdges[i].Start
 		end := sortedEdges[i].End
-		if start != end && !mst.IsAdjacent(start, end) {
+		if start != end && !mst.IsAdjacent(start, end) && verticesMap[start] != verticesMap[end] {
 			mst.AddEdge(start, end, sortedEdges[i].Weight)
-			for k, v := range verticesMap {
-				if v == end {
-					verticesMap[k] = start
-				}
-			}
+			verticesMap[end] = verticesMap[start]
 		}
 	}
 	return mst, nil

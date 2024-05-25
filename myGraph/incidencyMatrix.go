@@ -97,11 +97,16 @@ func (im *IncidenceMatrix) GetAllEdges() (edges []Edge) {
 		start := 0
 		end := 0
 		for j := 0; j < im.GetVertexCount(); j++ {
-			if im.VertexEdgeMatrix[j][i] == -1 {
+			if im.IsDirected() && im.VertexEdgeMatrix[j][i] == -1 {
 				start = j
-			} else if im.VertexEdgeMatrix[j][i] == 1 {
-				end = j
+			} else if im.VertexEdgeMatrix[j][i] != 0 {
+				if start == 0 {
+					start = j
+				} else {
+					end = j
+				}
 			}
+
 		}
 		edges = append(edges, Edge{Start: start, End: end, Weight: im.WeightsList[i]})
 	}

@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	graph := myGraph.GenerateGraphIncidenceMatrix(5, 100, false)
+	graph := myGraph.GenerateGraphIncidenceMatrix(7, 100, false)
 	fmt.Println(graph.ToString())
 
 	mst, _ := myGraph.Kruskal(graph, true)
