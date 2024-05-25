@@ -1,6 +1,9 @@
 package myGraph
 
-import "projekt2/utils"
+import (
+	"fmt"
+	"projekt2/utils"
+)
 
 type IncidenceMatrix struct {
 	VertexEdgeMatrix [][]int
@@ -78,15 +81,31 @@ func (im *IncidenceMatrix) GetEdge(start, end int) Edge {
 	for i := 0; i < im.GetEdgeCount(); i++ {
 		if im.IsDirected() {
 			if im.VertexEdgeMatrix[start][i] == -1 && im.VertexEdgeMatrix[end][i] == 1 {
-				return Edge{start: start, end: end, weight: im.WeightsList[i]}
+				return Edge{Start: start, End: end, Weight: im.WeightsList[i]}
 			}
 		} else {
 			if im.VertexEdgeMatrix[start][i] != 0 && im.VertexEdgeMatrix[end][i] != 0 {
-				return Edge{start: start, end: end, weight: im.WeightsList[i]}
+				return Edge{Start: start, End: end, Weight: im.WeightsList[i]}
 			}
 		}
 	}
 	return Edge{0, 0, 0}
+}
+
+func (im *IncidenceMatrix) GetAllEdges() (edges []Edge) {
+	for i := 0; i < im.GetEdgeCount(); i++ {
+		start := 0
+		end := 0
+		for j := 0; j < im.GetVertexCount(); j++ {
+			if im.VertexEdgeMatrix[j][i] == -1 {
+				start = j
+			} else if im.VertexEdgeMatrix[j][i] == 1 {
+				end = j
+			}
+		}
+		edges = append(edges, Edge{Start: start, End: end, Weight: im.WeightsList[i]})
+	}
+	return edges
 }
 
 func (im *IncidenceMatrix) AddEdge(start, end, weight int) {
@@ -165,7 +184,7 @@ func (im *IncidenceMatrix) ClearBrokenEdges() {
 }
 
 func (im *IncidenceMatrix) GetEdgeWeight(start, end int) int {
-	return im.GetEdge(start, end).weight
+	return im.GetEdge(start, end).Weight
 }
 
 func (im *IncidenceMatrix) SetEdgeWeight(start, end, weight int) {
@@ -189,4 +208,12 @@ func (im *IncidenceMatrix) SetEdgeWeight(start, end, weight int) {
 			im.WeightsList[i] = weight
 		}
 	}
+}
+
+func (im *IncidenceMatrix) ToString() (out string) {
+	for i := 0; i < im.GetVertexCount(); i++ {
+		out += fmt.Sprintln(i, ":", im.VertexEdgeMatrix[i])
+	}
+	out += fmt.Sprintln("Weights:", im.WeightsList)
+	return out
 }

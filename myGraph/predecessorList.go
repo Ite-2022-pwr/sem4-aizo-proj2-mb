@@ -1,5 +1,7 @@
 package myGraph
 
+import "fmt"
+
 type PredecessorList struct {
 	PredecessorList [][]Predecessor // map[predecessor]weight
 	Directed        bool
@@ -31,7 +33,7 @@ func (pl *PredecessorList) GetEdgeCount() (count int) {
 	} else {
 		for i := 0; i < pl.GetVertexCount(); i++ {
 			for j := 0; j < len(pl.PredecessorList[i]); j++ {
-				tempEdge := Edge{start: pl.PredecessorList[i][j].Vertex, end: i, weight: pl.PredecessorList[i][j].Weight}
+				tempEdge := Edge{Start: pl.PredecessorList[i][j].Vertex, End: i, Weight: pl.PredecessorList[i][j].Weight}
 				if !tempEdge.isInList(temp, pl.IsDirected()) {
 					temp = append(temp, tempEdge)
 				}
@@ -97,17 +99,30 @@ func (pl *PredecessorList) RemoveVertex(vertex int) {
 func (pl *PredecessorList) GetEdge(start, end int) Edge {
 	for i := 0; i < len(pl.PredecessorList[start]); i++ {
 		if pl.PredecessorList[start][i].Vertex == end {
-			return Edge{start: start, end: end, weight: pl.PredecessorList[start][i].Weight}
+			return Edge{Start: start, End: end, Weight: pl.PredecessorList[start][i].Weight}
 		}
 	}
 	if !pl.IsDirected() {
 		for i := 0; i < len(pl.PredecessorList[end]); i++ {
 			if pl.PredecessorList[end][i].Vertex == start {
-				return Edge{start: end, end: start, weight: pl.PredecessorList[end][i].Weight}
+				return Edge{Start: end, End: start, Weight: pl.PredecessorList[end][i].Weight}
 			}
 		}
 	}
 	return Edge{0, 0, 0}
+}
+
+func (pl *PredecessorList) GetAllEdges() (edges []Edge) {
+	edges = make([]Edge, 0)
+	for i := 0; i < pl.GetVertexCount(); i++ {
+		for j := 0; j < len(pl.PredecessorList[i]); j++ {
+			edge := pl.GetEdge(i, pl.PredecessorList[i][j].Vertex)
+			if !edge.isInList(edges, pl.IsDirected()) {
+				edges = append(edges, edge)
+			}
+		}
+	}
+	return edges
 }
 
 func (pl *PredecessorList) AddEdge(start, end, weight int) {
@@ -139,7 +154,7 @@ func (pl *PredecessorList) ClearBrokenEdges() {
 }
 
 func (pl *PredecessorList) GetEdgeWeight(start, end int) int {
-	return pl.GetEdge(start, end).weight
+	return pl.GetEdge(start, end).Weight
 }
 
 func (pl *PredecessorList) SetEdgeWeight(start, end, weight int) {
@@ -155,4 +170,11 @@ func (pl *PredecessorList) SetEdgeWeight(start, end, weight int) {
 			}
 		}
 	}
+}
+
+func (pl *PredecessorList) ToString() (out string) {
+	for i := 0; i < pl.GetVertexCount(); i++ {
+		out += fmt.Sprintln(i, ":", pl.PredecessorList[i])
+	}
+	return out
 }

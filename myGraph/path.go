@@ -19,5 +19,5 @@ func (p *Path) GetWeight() int {
 
 func (p *Path) AddEdge(edge Edge) {
 	p.Edges = append(p.Edges, edge)
-	p.Weight += edge.weight
+	p.Weight += edge.Weight
 }
