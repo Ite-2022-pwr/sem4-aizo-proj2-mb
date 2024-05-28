@@ -113,6 +113,15 @@ func (im *IncidenceMatrix) GetAllEdges() (edges []Edge) {
 	return edges
 }
 
+func (im *IncidenceMatrix) GetAllEdgesFrom(vertex int) (edges []Edge) {
+	neighbours := im.GetNeighbours(vertex)
+	edges = make([]Edge, 0)
+	for _, neighbour := range neighbours {
+		edges = append(edges, im.GetEdge(vertex, neighbour))
+	}
+	return edges
+}
+
 func (im *IncidenceMatrix) AddEdge(start, end, weight int) {
 	if im.IsAdjacent(start, end) {
 		panic("Edge already exists")

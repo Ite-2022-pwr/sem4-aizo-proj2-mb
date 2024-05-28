@@ -125,6 +125,15 @@ func (pl *PredecessorList) GetAllEdges() (edges []Edge) {
 	return edges
 }
 
+func (pl *PredecessorList) GetAllEdgesFrom(vertex int) (edges []Edge) {
+	neighbours := pl.GetNeighbours(vertex)
+	edges = make([]Edge, 0)
+	for _, neighbour := range neighbours {
+		edges = append(edges, pl.GetEdge(vertex, neighbour))
+	}
+	return edges
+}
+
 func (pl *PredecessorList) AddEdge(start, end, weight int) {
 	if pl.IsAdjacent(start, end) {
 		panic("Edge already exists")

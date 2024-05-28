@@ -11,6 +11,7 @@ type Graph interface {
 	RemoveVertex(int)
 	GetEdge(int, int) Edge
 	GetAllEdges() []Edge
+	GetAllEdgesFrom(int) []Edge
 	AddEdge(int, int, int)
 	RemoveEdge(int, int)
 	ClearBrokenEdges()
