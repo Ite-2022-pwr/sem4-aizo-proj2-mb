@@ -51,7 +51,7 @@ func (im *IncidenceMatrix) GetNeighbours(vertex int) (neighbours []int) {
 				if !im.IsDirected() && !utils.InListInt(neighbours, j) {
 					neighbours = append(neighbours, j)
 				} else {
-					if im.VertexEdgeMatrix[j][i] == -1 {
+					if im.VertexEdgeMatrix[j][i] == 1 && im.VertexEdgeMatrix[vertex][i] == -1 {
 						neighbours = append(neighbours, j)
 					}
 				}
@@ -226,8 +226,16 @@ func (im *IncidenceMatrix) SetEdgeWeight(start, end, weight int) {
 
 func (im *IncidenceMatrix) ToString() (out string) {
 	for i := 0; i < im.GetVertexCount(); i++ {
-		out += fmt.Sprintln(i, ":", im.VertexEdgeMatrix[i])
+		out += fmt.Sprintf("%3d \t:", i)
+		for j := 0; j < im.GetEdgeCount(); j++ {
+			out += fmt.Sprintf("%3d", im.VertexEdgeMatrix[i][j])
+		}
+		out += fmt.Sprintf("\n")
 	}
-	out += fmt.Sprintln("Weights:", im.WeightsList)
+	out += fmt.Sprintf("Weights\t:")
+	for i := 0; i < im.GetEdgeCount(); i++ {
+		out += fmt.Sprintf("%3d", im.WeightsList[i])
+	}
+	out += fmt.Sprintf("\n")
 	return out
 }

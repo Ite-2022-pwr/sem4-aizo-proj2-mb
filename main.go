@@ -6,10 +6,9 @@ import (
 )
 
 func main() {
-	graph := myGraph.GenerateGraphIncidenceMatrix(7, 100, false)
+	graph := myGraph.GenerateGraphIncidenceMatrix(7, 100, true)
 	fmt.Println(graph.ToString())
 
-	mst, _ := myGraph.Prim(graph, 0, true)
-	fmt.Println(mst.ToString())
-
+	test, _ := myGraph.Dijkstra(graph, 0)
+	fmt.Println(test)
 }

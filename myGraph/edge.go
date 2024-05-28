@@ -39,3 +39,13 @@ func SortEdgesListQS(edges []Edge) []Edge {
 	SortEdgesListQS(edges[left+1:])
 	return edges
 }
+
+func RemoveEdgeFromList(edge Edge, edgeList []Edge) (out []Edge) {
+	out = make([]Edge, 0)
+	for _, checkingEdge := range edgeList {
+		if checkingEdge.Weight != edge.Weight || checkingEdge.End != edge.End || checkingEdge.Start != edge.Start {
+			out = append(out, checkingEdge)
+		}
+	}
+	return out
+}
