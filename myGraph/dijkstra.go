@@ -2,7 +2,6 @@ package myGraph
 
 import (
 	"math"
-	"projekt2/utils"
 )
 
 func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding, err error) {
@@ -12,35 +11,33 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 	nextVertices := make([]int, 0)
 	nextVertices = append(nextVertices, 0)
 	visitingNow := startVertex
+	visitingNowPointer := FindByIndex(predecessorDistanceToStartList, visitingNow)
 	availableEdges := make([]Edge, 0)
 	for i := 0; i < vertexCount; i++ {
-		predecessorDistanceToStartList = append(predecessorDistanceToStartList, VertexPathfinding{i, -1, math.MaxInt})
+		predecessorDistanceToStartList = append(predecessorDistanceToStartList, VertexPathfinding{i, -1, (math.MaxInt - 1000), false})
 	}
 	predecessorDistanceToStartList[startVertex].WeightToStart = 0
-	availableEdges = append(availableEdges, inputGraph.GetAllEdgesFrom(visitingNow)...)
+	predecessorDistanceToStartList[startVertex].Visited = true
 	for len(visited) < vertexCount {
-		SortEdgesListQS(availableEdges)
+		availableEdges = inputGraph.GetAllEdgesFrom(visitingNow)
 		for _, edge := range availableEdges {
-			if edge.Start != visitingNow {
-				break
-			} else {
-				newWeight := predecessorDistanceToStartList[visitingNow].WeightToStart + edge.Weight
-				if newWeight < predecessorDistanceToStartList[edge.End].WeightToStart {
-					predecessorDistanceToStartList[edge.End].WeightToStart = newWeight
-					predecessorDistanceToStartList[edge.End].Predecessor = visitingNow
-				}
-				if !utils.InListInt(nextVertices, edge.End) {
-					nextVertices = append(nextVertices, edge.End)
-					availableEdges = append(availableEdges, inputGraph.GetAllEdgesFrom(edge.End)...)
-				}
-				availableEdges = RemoveEdgeFromList(edge, availableEdges)
-				availableEdges = SortEdgesListQS(availableEdges)
+			temp := predecessorDistanceToStartList[edge.Start].WeightToStart + edge.Weight
+			checkingVertex := FindByIndex(predecessorDistanceToStartList, edge.End)
+			if temp < checkingVertex.WeightToStart { // indexing changes and thats why it fucking breaksS!!!!!!!
+				checkingVertex.WeightToStart = temp
+				checkingVertex.Predecessor = visitingNow
 			}
-
 		}
 		visited = append(visited, visitingNow)
-		visitingNow = availableEdges[0].Start
+		visitingNowPointer.Visited = true
+		SortByWeightToStartQS(predecessorDistanceToStartList)
+		for j := 0; j < len(predecessorDistanceToStartList); j++ {
+			if !predecessorDistanceToStartList[j].Visited {
+				visitingNow = predecessorDistanceToStartList[j].Index
+				visitingNowPointer = FindByIndex(predecessorDistanceToStartList, visitingNow)
+				break
+			}
+		}
 	}
-
 	return predecessorDistanceToStartList, nil
 }
