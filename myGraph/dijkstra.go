@@ -21,10 +21,10 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 	for len(visited) < vertexCount {
 		availableEdges = inputGraph.GetAllEdgesFrom(visitingNow)
 		for _, edge := range availableEdges {
-			temp := predecessorDistanceToStartList[edge.Start].WeightToStart + edge.Weight
+			newWeight := visitingNowPointer.WeightToStart + edge.Weight
 			checkingVertex := FindByIndex(predecessorDistanceToStartList, edge.End)
-			if temp < checkingVertex.WeightToStart { // indexing changes and thats why it fucking breaksS!!!!!!!
-				checkingVertex.WeightToStart = temp
+			if newWeight < checkingVertex.WeightToStart {
+				checkingVertex.WeightToStart = newWeight
 				checkingVertex.Predecessor = visitingNow
 			}
 		}
