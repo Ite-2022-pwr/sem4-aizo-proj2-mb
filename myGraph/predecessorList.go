@@ -97,15 +97,15 @@ func (pl *PredecessorList) RemoveVertex(vertex int) {
 }
 
 func (pl *PredecessorList) GetEdge(start, end int) Edge {
-	for i := 0; i < len(pl.PredecessorList[start]); i++ {
-		if pl.PredecessorList[start][i].Vertex == end {
-			return Edge{Start: start, End: end, Weight: pl.PredecessorList[start][i].Weight}
+	for i := 0; i < len(pl.PredecessorList[end]); i++ {
+		if pl.PredecessorList[end][i].Vertex == start {
+			return Edge{Start: start, End: end, Weight: pl.PredecessorList[end][i].Weight}
 		}
 	}
 	if !pl.IsDirected() {
-		for i := 0; i < len(pl.PredecessorList[end]); i++ {
-			if pl.PredecessorList[end][i].Vertex == start {
-				return Edge{Start: end, End: start, Weight: pl.PredecessorList[end][i].Weight}
+		for i := 0; i < len(pl.PredecessorList[start]); i++ {
+			if pl.PredecessorList[start][i].Vertex == end {
+				return Edge{Start: end, End: start, Weight: pl.PredecessorList[start][i].Weight}
 			}
 		}
 	}

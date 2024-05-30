@@ -14,7 +14,7 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 	visitingNowPointer := FindByIndex(predecessorDistanceToStartList, visitingNow)
 	availableEdges := make([]Edge, 0)
 	for i := 0; i < vertexCount; i++ {
-		predecessorDistanceToStartList = append(predecessorDistanceToStartList, VertexPathfinding{i, -1, (math.MaxInt - 1000), false})
+		predecessorDistanceToStartList = append(predecessorDistanceToStartList, VertexPathfinding{i, -1, math.MaxInt - 1000, false})
 	}
 	predecessorDistanceToStartList[startVertex].WeightToStart = 0
 	predecessorDistanceToStartList[startVertex].Visited = true

@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	graph := myGraph.GenerateGraphIncidenceMatrix(10, 20, true)
+	graph := myGraph.GeneratePredecessorListGraph(10, 10, true)
 	fmt.Println(graph.ToString())
 
 	test, _ := myGraph.Dijkstra(graph, 0)

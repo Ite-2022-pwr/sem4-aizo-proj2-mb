@@ -56,7 +56,12 @@ func GeneratePredecessorListGraph(vertices, percentageConnected int, directed bo
 	for i := 0; i < vertices; i++ {
 		graph.AddVertex()
 	}
-	maxEdges := vertices * (vertices - 1) / 2
+	maxEdges := 0
+	if directed {
+		maxEdges = vertices * (vertices - 1)
+	} else {
+		maxEdges = vertices * (vertices - 1) / 2
+	}
 	edges := maxEdges * percentageConnected / 100
 	graph.AddEdge(0, 1, rand.Intn(10)+1)
 	connected = append(connected, 0, 1)
