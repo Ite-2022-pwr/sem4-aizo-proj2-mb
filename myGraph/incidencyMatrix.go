@@ -125,6 +125,8 @@ func (im *IncidenceMatrix) GetAllEdgesFrom(vertex int) (edges []Edge) {
 	for _, edge := range allEdges {
 		if edge.Start == vertex {
 			edges = append(edges, edge)
+		} else if !im.IsDirected() && edge.End == vertex {
+			edges = append(edges, Edge{Start: edge.End, End: edge.Start, Weight: edge.Weight})
 		}
 	}
 	return edges

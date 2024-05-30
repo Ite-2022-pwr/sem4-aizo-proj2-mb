@@ -18,10 +18,14 @@ func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst G
 	for len(connected) < verticesCount {
 		edges := make([]Edge, 0)
 		for _, connectedVertex := range connected {
-			edges = append(edges, inputGraph.GetAllEdgesFrom(connectedVertex)...)
+			temp := inputGraph.GetAllEdgesFrom(connectedVertex)
+			edges = append(edges, temp...)
 		}
 		edges = SortEdgesListQS(edges)
 		for {
+			if len(edges) == 0 {
+				break
+			}
 			minEdge := edges[0]
 			if !minEdge.isInList(usedEdges, false) && !utils.InListInt(connected, minEdge.End) {
 				mst.AddEdge(minEdge.Start, minEdge.End, minEdge.Weight)
