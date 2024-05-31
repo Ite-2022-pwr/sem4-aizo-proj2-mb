@@ -30,6 +30,7 @@ func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToSta
 	for i := 0; i < vertexCount-1; i++ {
 		edges := graph.GetAllEdges()
 		for _, edge := range edges {
+			fmt.Println("Edge:", edge.Start, edge.End, edge.Weight, verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
 			if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart+edge.Weight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
 				verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart = verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart + edge.Weight
 				verticesWithPredecessorsAndWeightToStart[edge.End].Predecessor = edge.Start

@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	graph := myGraph.GenerateRandomGraph(1000, 100, true, true)
+	graph := myGraph.GenerateRandomGraph(200, 100, true, true)
 
 	fmt.Println(graph.GetEdgeCount())
 

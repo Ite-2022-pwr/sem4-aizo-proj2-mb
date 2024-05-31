@@ -1,6 +1,7 @@
 package myGraph
 
 import (
+	"fmt"
 	"math"
 	"projekt2/timeTrack"
 	"time"
@@ -61,6 +62,7 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 			if !predecessorDistanceToStartList[i].Visited && predecessorDistanceToStartList[i].WeightToStart < minWeight {
 				minWeight = predecessorDistanceToStartList[i].WeightToStart
 				visitingNow = i
+				fmt.Println("Visiting now:", visitingNow)
 				visitingNowPointer = &predecessorDistanceToStartList[i]
 			}
 		}

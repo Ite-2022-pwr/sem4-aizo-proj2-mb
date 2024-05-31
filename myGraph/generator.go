@@ -58,8 +58,8 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed, useInciden
 		if start != end && !graph.IsAdjacent(start, end) {
 			graph.AddEdge(start, end, rand.Intn(10)+1)
 			edgesAdded++
+			fmt.Println("Edges added:", edgesAdded, " / Desired:", desiredEdges)
 		}
-		fmt.Println(graph.GetEdgeCount())
 	}
 
 	return graph

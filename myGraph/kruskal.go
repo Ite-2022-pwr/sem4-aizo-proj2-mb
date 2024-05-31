@@ -1,6 +1,7 @@
 package myGraph
 
 import (
+	"fmt"
 	"projekt2/timeTrack"
 	"projekt2/utils"
 	"time"
@@ -42,7 +43,7 @@ func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, el
 		if len(connected) == mst.GetVertexCount() {
 			break
 		}
-
+		fmt.Println(verticesMap)
 		start := edge.Start
 		end := edge.End
 

@@ -2,6 +2,7 @@ package myGraph
 
 import (
 	"container/heap"
+	"fmt"
 	"projekt2/timeTrack"
 	"time"
 )
@@ -67,7 +68,7 @@ func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst G
 	for pq.Len() > 0 {
 		// Extract the edge with the minimum weight
 		minEdge := heap.Pop(pq).(*Edge)
-
+		fmt.Println(inMST)
 		if !inMST[minEdge.End] {
 			// If the end vertex is not in the MST, add the edge to the MST
 			mst.AddEdge(minEdge.Start, minEdge.End, minEdge.Weight)
