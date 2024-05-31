@@ -2,8 +2,10 @@ package myGraph
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"projekt2/timeTrack"
+	"projekt2/utils"
 	"time"
 )
 
@@ -42,6 +44,11 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 		// Get all edges from the currently visiting vertex
 		availableEdges := inputGraph.GetAllEdgesFrom(visitingNow)
 
+		fmt.Println("Visiting now pointer index:", visitingNowPointer.Index)
+		log.Println("Visiting now pointer index:", visitingNowPointer.Index)
+		fmt.Println("Visiting now index:", visitingNow)
+		log.Println("Visiting now index:", visitingNow)
+
 		// Step 5: Relaxation step - update the shortest path estimates
 		for _, edge := range availableEdges {
 			newWeight := visitingNowPointer.WeightToStart + edge.Weight
@@ -59,10 +66,9 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 		// Step 6: Find the next vertex to visit (the one with the smallest distance that hasn't been visited)
 		minWeight := math.MaxInt
 		for i := 0; i < vertexCount; i++ {
-			if !predecessorDistanceToStartList[i].Visited && predecessorDistanceToStartList[i].WeightToStart < minWeight {
+			if !predecessorDistanceToStartList[i].Visited && predecessorDistanceToStartList[i].WeightToStart < minWeight && !utils.InListInt(visited, i) {
 				minWeight = predecessorDistanceToStartList[i].WeightToStart
 				visitingNow = i
-				fmt.Println("Visiting now:", visitingNow)
 				visitingNowPointer = &predecessorDistanceToStartList[i]
 			}
 		}

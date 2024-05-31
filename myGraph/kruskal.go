@@ -2,6 +2,7 @@ package myGraph
 
 import (
 	"fmt"
+	"log"
 	"projekt2/timeTrack"
 	"projekt2/utils"
 	"time"
@@ -44,6 +45,7 @@ func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, el
 			break
 		}
 		fmt.Println(verticesMap)
+		log.Println(verticesMap)
 		start := edge.Start
 		end := edge.End
 

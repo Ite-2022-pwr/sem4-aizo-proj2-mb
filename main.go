@@ -6,17 +6,32 @@ import (
 )
 
 func main() {
-	graph := myGraph.GenerateRandomGraph(200, 100, true, true)
+	graphDirected := myGraph.GenerateRandomGraph(1000, 100, true, true)
 
-	fmt.Println(graph.GetEdgeCount())
+	fmt.Println(graphDirected.GetEdgeCount())
 
-	myGraph.Dijkstra(graph, 0)
+	myGraph.Dijkstra(graphDirected, 0)
 	//test, _ := myGraph.Dijkstra(graph, 0)
 	//fmt.Println(test)
 
-	myGraph.BellmanFord(graph, 0)
+	myGraph.BellmanFord(graphDirected, 0)
 	//test2, _ := myGraph.BellmanFord(graph, 0)
 	//fmt.Println(test2)
+
+	err1 := myGraph.SaveToFile(graphDirected, "graphDirectedThousandVertices.txt")
+	if err1 != nil {
+		fmt.Println("Error saving graph to file:", err1)
+	} else {
+		fmt.Println("Graph saved to graph.txt")
+	}
+
+	graphUndirected := myGraph.GenerateRandomGraph(1000, 100, false, true)
+
+	fmt.Println(graphUndirected.GetEdgeCount())
+
+	myGraph.Kruskal(graphUndirected, true)
+
+	myGraph.Prim(graphUndirected, 0, true)
 
 	//mst1, time1 := myGraph.Kruskal(graph, true)
 	//fmt.Println(mst1.GetEdgeCount())
@@ -26,20 +41,11 @@ func main() {
 	//fmt.Println(mst2.GetEdgeCount())
 	//fmt.Println("Time:", time1)
 
-	err := myGraph.SaveToFile(graph, "graph.txt")
-	if err != nil {
-		fmt.Println("Error saving graph to file:", err)
+	err2 := myGraph.SaveToFile(graphUndirected, "graphDirectedThousandVertices.txt")
+	if err2 != nil {
+		fmt.Println("Error saving graph to file:", err2)
 	} else {
 		fmt.Println("Graph saved to graph.txt")
-	}
-
-	readGraph, err := myGraph.ReadFromFile("graph.txt", true, true)
-	if err != nil {
-		fmt.Println("Error reading graph from file:", err)
-	} else {
-		fmt.Println("Graph read from graph.txt")
-		fmt.Println(readGraph.GetEdgeCount())
-		//fmt.Println(readGraph.ToString())
 	}
 
 }

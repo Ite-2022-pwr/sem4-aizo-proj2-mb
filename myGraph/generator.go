@@ -2,6 +2,7 @@ package myGraph
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"projekt2/timeTrack"
 	"time"
@@ -45,7 +46,7 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed, useInciden
 		start := rand.Intn(vertices)
 		end := rand.Intn(vertices)
 		if start != end && connected[start] && !connected[end] && !graph.IsAdjacent(start, end) {
-			graph.AddEdge(start, end, rand.Intn(100)+1)
+			graph.AddEdge(start, end, rand.Intn(1000)+1)
 			connected[end] = true
 			edgesAdded++
 		}
@@ -59,6 +60,7 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed, useInciden
 			graph.AddEdge(start, end, rand.Intn(10)+1)
 			edgesAdded++
 			fmt.Println("Edges added:", edgesAdded, " / Desired:", desiredEdges)
+			log.Println("Edges added:", edgesAdded, " / Desired:", desiredEdges)
 		}
 	}
 
