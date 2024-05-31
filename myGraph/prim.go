@@ -15,11 +15,15 @@ func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst G
 	connected := make([]int, 0)
 	connected = append(connected, startVertex)
 	usedEdges := make([]Edge, 0)
+	edges := make([]Edge, 0)
 	for len(connected) < verticesCount {
-		edges := make([]Edge, 0)
 		for _, connectedVertex := range connected {
-			temp := inputGraph.GetAllEdgesFrom(connectedVertex)
-			edges = append(edges, temp...)
+			potentialEdges := inputGraph.GetAllEdgesFrom(connectedVertex)
+			for _, edge := range potentialEdges {
+				if !edge.isInList(edges, false) && !edge.isInList(usedEdges, false) {
+					edges = append(edges, edge)
+				}
+			}
 		}
 		edges = SortEdgesListQS(edges)
 		for {
