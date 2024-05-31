@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	graph := myGraph.GenerateGraphIncidenceMatrix(10, 30, true)
+	graph := myGraph.GenerateGraphIncidenceMatrix(10, 100, true)
 	fmt.Println(graph.ToString())
 
 	test := myGraph.Dijkstra(graph, 0)
