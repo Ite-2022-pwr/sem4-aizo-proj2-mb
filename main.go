@@ -21,4 +21,20 @@ func main() {
 	//
 	mst2, _ := myGraph.Prim(graph, 0, true)
 	fmt.Println(mst2.ToString())
+
+	err := myGraph.SaveToFile(graph, "graph.txt")
+	if err != nil {
+		fmt.Println("Error saving graph to file:", err)
+	} else {
+		fmt.Println("Graph saved to graph.txt")
+	}
+
+	readGraph, err := myGraph.ReadFromFile("graph.txt", false, true)
+	if err != nil {
+		fmt.Println("Error reading graph from file:", err)
+	} else {
+		fmt.Println("Graph read from graph.txt")
+		fmt.Println(readGraph.ToString())
+	}
+
 }
