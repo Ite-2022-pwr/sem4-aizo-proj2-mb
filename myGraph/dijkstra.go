@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding, err error) {
+func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding) {
 	predecessorDistanceToStartList := make([]VertexPathfinding, 0)
 	vertexCount := inputGraph.GetVertexCount()
 	visited := make([]int, 0)
@@ -39,5 +39,5 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 			}
 		}
 	}
-	return predecessorDistanceToStartList, nil
+	return predecessorDistanceToStartList
 }

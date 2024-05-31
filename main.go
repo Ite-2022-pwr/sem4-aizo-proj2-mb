@@ -9,7 +9,7 @@ func main() {
 	graph := myGraph.GenerateGraphIncidenceMatrix(10, 30, true)
 	fmt.Println(graph.ToString())
 
-	test, _ := myGraph.Dijkstra(graph, 0)
+	test := myGraph.Dijkstra(graph, 0)
 	fmt.Println(test)
 
 	test2 := myGraph.BellmanFord(graph, 0)
