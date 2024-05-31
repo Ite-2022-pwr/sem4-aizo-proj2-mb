@@ -49,6 +49,8 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed, useInciden
 			graph.AddEdge(start, end, rand.Intn(1000)+1)
 			connected[end] = true
 			edgesAdded++
+			fmt.Println("Edges added:", edgesAdded, " / Desired:", desiredEdges)
+			log.Println("Edges added:", edgesAdded, " / Desired:", desiredEdges)
 		}
 	}
 

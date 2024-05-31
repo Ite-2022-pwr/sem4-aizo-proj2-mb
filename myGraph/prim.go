@@ -34,6 +34,14 @@ func (pq *EdgePriorityQueue) Pop() interface{} {
 	return item
 }
 
+func (pq *EdgePriorityQueue) ToString() (out string) {
+	out = fmt.Sprintf("Priority Queue:\n")
+	for _, edge := range *pq {
+		out += fmt.Sprintf("%d -> %d: %d\n", edge.Start, edge.End, edge.Weight)
+	}
+	return out
+}
+
 // Prim's algorithm to find the Minimum Spanning Tree (MST) of a graph
 func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst Graph, elapsed int64) {
 	startTime := time.Now()
@@ -69,8 +77,8 @@ func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst G
 	for pq.Len() > 0 {
 		// Extract the edge with the minimum weight
 		minEdge := heap.Pop(pq).(*Edge)
-		fmt.Println(inMST)
-		log.Println(inMST)
+		fmt.Println(pq.ToString())
+		log.Println(pq.ToString())
 		if !inMST[minEdge.End] {
 			// If the end vertex is not in the MST, add the edge to the MST
 			mst.AddEdge(minEdge.Start, minEdge.End, minEdge.Weight)

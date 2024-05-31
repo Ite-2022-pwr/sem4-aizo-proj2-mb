@@ -33,6 +33,17 @@ func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToSta
 		for _, edge := range edges {
 			fmt.Println("Edge:", edge.Start, edge.End, edge.Weight, verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
 			log.Println("Edge:", edge.Start, edge.End, edge.Weight, verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
+			newWeight := verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart + edge.Weight
+			fmt.Println("d(", edge.Start, ") + w(", edge.Start, ",", edge.Weight, "):", verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, "+", edge.Weight, "=", newWeight)
+			log.Println("d(", edge.Start, ") + w(", edge.Start, ",", edge.Weight, "):", verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, "+", edge.Weight, "=", newWeight)
+			if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart == math.MaxInt32 {
+				fmt.Println("Vertex", edge.Start, "has not been visited yet")
+				log.Println("Vertex", edge.Start, "has not been visited yet")
+			}
+			fmt.Println("Checking vertex:", edge.End, "d(", edge.End, "):", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
+			log.Println("Checking vertex:", edge.End, "d(", edge.End, "):", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
+			fmt.Println("New weight:", newWeight, "<", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart, "? ", newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
+			log.Println("New weight:", newWeight, "<", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart, "? ", newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
 			if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart+edge.Weight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
 				verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart = verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart + edge.Weight
 				verticesWithPredecessorsAndWeightToStart[edge.End].Predecessor = edge.Start
@@ -45,6 +56,7 @@ func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToSta
 	for _, edge := range edges {
 		if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart+edge.Weight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
 			fmt.Println("Graph contains a negative-weight cycle")
+			log.Println("Graph contains a negative-weight cycle")
 			return nil, 0
 		}
 	}

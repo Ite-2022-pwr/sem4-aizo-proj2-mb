@@ -2,11 +2,35 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 	"projekt2/myGraph"
+	"time"
 )
 
 func main() {
-	graphDirected := myGraph.GenerateRandomGraph(1000, 100, true, true)
+
+	//save all logs to file
+	dateString := time.Now().Format("2006-01-02_15:04:05")
+	logFileName := dateString + ".log"
+	f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+	} else {
+		defer func(f *os.File) {
+			err := f.Close()
+			if err != nil {
+				fmt.Println("Error closing file:", err)
+			}
+		}(f)
+		log.SetOutput(f)
+	}
+
+	vertices := 100
+	percentageConnected := 25
+
+	graphDirected := myGraph.GenerateRandomGraph(vertices, percentageConnected, true, true)
 
 	fmt.Println(graphDirected.GetEdgeCount())
 
@@ -22,10 +46,11 @@ func main() {
 	if err1 != nil {
 		fmt.Println("Error saving graph to file:", err1)
 	} else {
-		fmt.Println("Graph saved to graph.txt")
+		fmt.Println("Graph saved")
+		log.Println("Graph saved")
 	}
 
-	graphUndirected := myGraph.GenerateRandomGraph(1000, 100, false, true)
+	graphUndirected := myGraph.GenerateRandomGraph(vertices, percentageConnected, false, true)
 
 	fmt.Println(graphUndirected.GetEdgeCount())
 
@@ -45,7 +70,8 @@ func main() {
 	if err2 != nil {
 		fmt.Println("Error saving graph to file:", err2)
 	} else {
-		fmt.Println("Graph saved to graph.txt")
+		fmt.Println("Graph saved")
+		log.Println("Graph saved")
 	}
 
 }

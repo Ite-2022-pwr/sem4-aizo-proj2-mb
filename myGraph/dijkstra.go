@@ -53,6 +53,12 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 		for _, edge := range availableEdges {
 			newWeight := visitingNowPointer.WeightToStart + edge.Weight
 			checkingVertex := &predecessorDistanceToStartList[edge.End]
+			fmt.Println("d(", visitingNowPointer.Index, ") + w(", visitingNowPointer.Index, ",", edge.Weight, "):", visitingNowPointer.WeightToStart, "+", edge.Weight, "=", newWeight)
+			log.Println("d(", visitingNowPointer.Index, ") + w(", visitingNowPointer.Index, ",", edge.Weight, "):", visitingNowPointer.WeightToStart, "+", edge.Weight, "=", newWeight)
+			fmt.Println("Checking vertex:", checkingVertex.Index, "d(", checkingVertex.Index, "):", checkingVertex.WeightToStart)
+			log.Println("Checking vertex:", checkingVertex.Index, "d(", checkingVertex.Index, "):", checkingVertex.WeightToStart)
+			fmt.Println("New weight:", newWeight, "<", checkingVertex.WeightToStart, "? ", newWeight < checkingVertex.WeightToStart)
+			log.Println("New weight:", newWeight, "<", checkingVertex.WeightToStart, "? ", newWeight < checkingVertex.WeightToStart)
 			if newWeight < checkingVertex.WeightToStart {
 				checkingVertex.WeightToStart = newWeight
 				checkingVertex.Predecessor = visitingNow
