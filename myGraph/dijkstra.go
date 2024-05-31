@@ -4,40 +4,67 @@ import (
 	"math"
 )
 
+// Dijkstra's algorithm to find the shortest paths from a start vertex to all other vertices in the graph
 func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding) {
-	predecessorDistanceToStartList := make([]VertexPathfinding, 0)
+	// Step 1: Initialize the list to hold the pathfinding information for each vertex
 	vertexCount := inputGraph.GetVertexCount()
-	visited := make([]int, 0)
-	nextVertices := make([]int, 0)
-	nextVertices = append(nextVertices, 0)
-	visitingNow := startVertex
-	visitingNowPointer := FindByIndex(predecessorDistanceToStartList, visitingNow)
-	availableEdges := make([]Edge, 0)
+	predecessorDistanceToStartList := make([]VertexPathfinding, vertexCount)
+
+	// Step 2: Initialize each vertex with infinite distance and no predecessor
 	for i := 0; i < vertexCount; i++ {
-		predecessorDistanceToStartList = append(predecessorDistanceToStartList, VertexPathfinding{i, -1, math.MaxInt - 1000, false})
+		predecessorDistanceToStartList[i] = VertexPathfinding{
+			Index:         i,
+			Predecessor:   -1,
+			WeightToStart: math.MaxInt - 1000,
+			Visited:       false,
+		}
 	}
+
+	// Step 3: Set the start vertex distance to 0 and mark it as visited
 	predecessorDistanceToStartList[startVertex].WeightToStart = 0
-	predecessorDistanceToStartList[startVertex].Visited = true
+
+	// List to keep track of visited vertices
+	visited := make([]int, 0)
+
+	// Start with the start vertex
+	visitingNow := startVertex
+	visitingNowPointer := &predecessorDistanceToStartList[visitingNow]
+
+	// Step 4: Main loop to visit all vertices
 	for len(visited) < vertexCount {
-		availableEdges = inputGraph.GetAllEdgesFrom(visitingNow)
+		// Get all edges from the currently visiting vertex
+		availableEdges := inputGraph.GetAllEdgesFrom(visitingNow)
+
+		// Step 5: Relaxation step - update the shortest path estimates
 		for _, edge := range availableEdges {
 			newWeight := visitingNowPointer.WeightToStart + edge.Weight
-			checkingVertex := FindByIndex(predecessorDistanceToStartList, edge.End)
+			checkingVertex := &predecessorDistanceToStartList[edge.End]
 			if newWeight < checkingVertex.WeightToStart {
 				checkingVertex.WeightToStart = newWeight
 				checkingVertex.Predecessor = visitingNow
 			}
 		}
+
+		// Mark the current vertex as visited
 		visited = append(visited, visitingNow)
 		visitingNowPointer.Visited = true
-		SortByWeightToStartQS(predecessorDistanceToStartList)
-		for j := 0; j < len(predecessorDistanceToStartList); j++ {
-			if !predecessorDistanceToStartList[j].Visited {
-				visitingNow = predecessorDistanceToStartList[j].Index
-				visitingNowPointer = FindByIndex(predecessorDistanceToStartList, visitingNow)
-				break
+
+		// Step 6: Find the next vertex to visit (the one with the smallest distance that hasn't been visited)
+		minWeight := math.MaxInt
+		for i := 0; i < vertexCount; i++ {
+			if !predecessorDistanceToStartList[i].Visited && predecessorDistanceToStartList[i].WeightToStart < minWeight {
+				minWeight = predecessorDistanceToStartList[i].WeightToStart
+				visitingNow = i
+				visitingNowPointer = &predecessorDistanceToStartList[i]
 			}
 		}
+
+		// If there are no more vertices to visit, break the loop
+		if minWeight == math.MaxInt {
+			break
+		}
 	}
+
+	// Return the list of vertices with their shortest path information
 	return predecessorDistanceToStartList
 }
