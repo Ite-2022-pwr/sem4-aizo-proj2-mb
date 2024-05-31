@@ -9,12 +9,13 @@ import (
 	"time"
 )
 
-// Dijkstra's algorithm to find the shortest paths from a start vertex to all other vertices in the graph
-func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding, elapsed int64) {
+// Dijkstra's algorithm to find the shortest path from a start vertex to an end vertex in the graph
+func Dijkstra(inputGraph Graph, startVertex, endVertex int) (path *Path, elapsed int64) {
 	startTime := time.Now()
 	defer func() {
 		elapsed = timeTrack.TimeTrack(startTime, "Dijkstra")
 	}()
+
 	// Step 1: Initialize the list to hold the pathfinding information for each vertex
 	vertexCount := inputGraph.GetVertexCount()
 	predecessorDistanceToStartList := make([]VertexPathfinding, vertexCount)
@@ -29,7 +30,7 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 		}
 	}
 
-	// Step 3: Set the start vertex distance to 0 and mark it as visited
+	// Step 3: Set the start vertex distance to 0
 	predecessorDistanceToStartList[startVertex].WeightToStart = 0
 
 	// List to keep track of visited vertices
@@ -85,6 +86,34 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 		}
 	}
 
-	// Return the list of vertices with their shortest path information
-	return predecessorDistanceToStartList, 0
+	// Construct the path from startVertex to endVertex
+	path = NewPath()
+	currentVertex := endVertex
+	for currentVertex != startVertex {
+		predecessor := predecessorDistanceToStartList[currentVertex].Predecessor
+		if predecessor == -1 {
+			// If no predecessor is found, it means there is no path
+			fmt.Println("No path found from", startVertex, "to", endVertex)
+			log.Println("No path found from", startVertex, "to", endVertex)
+			return nil, timeTrack.TimeTrack(startTime, "Dijkstra")
+		}
+		edgeWeight := inputGraph.GetEdgeWeight(predecessor, currentVertex)
+		fmt.Println("Adding edge to path:", predecessor, "->", currentVertex, "with weight", edgeWeight)
+		log.Println("Adding edge to path:", predecessor, "->", currentVertex, "with weight", edgeWeight)
+		path.AddEdge(Edge{Start: predecessor, End: currentVertex, Weight: edgeWeight})
+		currentVertex = predecessor
+	}
+
+	// Reverse the edges to get the path from start to end
+	for i, j := 0, len(path.Edges)-1; i < j; i, j = i+1, j-1 {
+		path.Edges[i], path.Edges[j] = path.Edges[j], path.Edges[i]
+	}
+
+	// Log the final path
+	pathString := path.ToString()
+	fmt.Println(pathString)
+	log.Println(pathString)
+
+	// Return the path and the elapsed time
+	return path, 0
 }

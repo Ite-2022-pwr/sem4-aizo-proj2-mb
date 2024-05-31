@@ -8,13 +8,14 @@ import (
 	"time"
 )
 
-func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding, elapsed int64) {
+func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 	startTime := time.Now()
 	defer func() {
 		elapsed = timeTrack.TimeTrack(startTime, "BellmanFord")
 	}()
+
 	vertexCount := graph.GetVertexCount()
-	verticesWithPredecessorsAndWeightToStart = make([]VertexPathfinding, vertexCount)
+	verticesWithPredecessorsAndWeightToStart := make([]VertexPathfinding, vertexCount)
 
 	// Initialize the pathfinding list
 	for i := 0; i < vertexCount; i++ {
@@ -44,8 +45,8 @@ func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToSta
 			log.Println("Checking vertex:", edge.End, "d(", edge.End, "):", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
 			fmt.Println("New weight:", newWeight, "<", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart, "? ", newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
 			log.Println("New weight:", newWeight, "<", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart, "? ", newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
-			if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart+edge.Weight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
-				verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart = verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart + edge.Weight
+			if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
+				verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart = newWeight
 				verticesWithPredecessorsAndWeightToStart[edge.End].Predecessor = edge.Start
 			}
 		}
@@ -61,5 +62,34 @@ func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToSta
 		}
 	}
 
-	return verticesWithPredecessorsAndWeightToStart, 0
+	// Construct the path from start to end
+	path = NewPath()
+	currentVertex := end
+	for currentVertex != start {
+		predecessor := verticesWithPredecessorsAndWeightToStart[currentVertex].Predecessor
+		if predecessor == -1 {
+			// If no predecessor is found, it means there is no path
+			fmt.Println("No path found from", start, "to", end)
+			log.Println("No path found from", start, "to", end)
+			return nil, timeTrack.TimeTrack(startTime, "BellmanFord")
+		}
+		edgeWeight := graph.GetEdgeWeight(predecessor, currentVertex)
+		fmt.Println("Adding edge to path:", predecessor, "->", currentVertex, "with weight", edgeWeight)
+		log.Println("Adding edge to path:", predecessor, "->", currentVertex, "with weight", edgeWeight)
+		path.AddEdge(Edge{Start: predecessor, End: currentVertex, Weight: edgeWeight})
+		currentVertex = predecessor
+	}
+
+	// Reverse the edges to get the path from start to end
+	for i, j := 0, len(path.Edges)-1; i < j; i, j = i+1, j-1 {
+		path.Edges[i], path.Edges[j] = path.Edges[j], path.Edges[i]
+	}
+
+	// Log the final path
+	pathString := path.ToString()
+	fmt.Println(pathString)
+	log.Println(pathString)
+
+	// Return the path and the elapsed time
+	return path, 0
 }

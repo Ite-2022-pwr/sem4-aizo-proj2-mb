@@ -34,11 +34,11 @@ func main() {
 
 	fmt.Println(graphDirected.GetEdgeCount())
 
-	myGraph.Dijkstra(graphDirected, 0)
+	myGraph.Dijkstra(graphDirected, 0, 69)
 	//test, _ := myGraph.Dijkstra(graph, 0)
 	//fmt.Println(test)
 
-	myGraph.BellmanFord(graphDirected, 0)
+	myGraph.BellmanFord(graphDirected, 0, 69)
 	//test2, _ := myGraph.BellmanFord(graph, 0)
 	//fmt.Println(test2)
 
