@@ -1,11 +1,15 @@
 package myGraph
 
 import (
+	"fmt"
 	"math/rand"
+	"projekt2/timeTrack"
+	"time"
 )
 
 // GenerateRandomGraph creates a random graph with the specified vertex count, edge infill percentage, directionality, and graph type.
 func GenerateRandomGraph(vertices, percentageConnected int, directed, useIncidenceMatrix bool) Graph {
+	defer timeTrack.TimeTrack(time.Now(), "GenerateRandomGraph")
 	var graph Graph
 	if useIncidenceMatrix {
 		graph = NewIncidenceMatrix()
@@ -55,6 +59,7 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed, useInciden
 			graph.AddEdge(start, end, rand.Intn(10)+1)
 			edgesAdded++
 		}
+		fmt.Println(graph.GetEdgeCount())
 	}
 
 	return graph

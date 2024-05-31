@@ -1,12 +1,17 @@
 package myGraph
 
 import (
-	"errors"
+	"projekt2/timeTrack"
 	"projekt2/utils"
+	"time"
 )
 
 // Kruskal algorithm to find the Minimum Spanning Tree (MST) of a graph
-func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, err error) {
+func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, elapsed int64) {
+	startTime := time.Now()
+	defer func() {
+		elapsed = timeTrack.TimeTrack(startTime, "Kruskal")
+	}()
 	// Step 1: Sort all edges in the input graph by weight in non-decreasing order
 	sortedEdges := SortEdgesListQS(inputGraph.GetAllEdges())
 
@@ -67,8 +72,8 @@ func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, er
 
 	// Step 5: Ensure the resulting MST is valid
 	if len(connected) != mst.GetVertexCount() && mst.GetEdgeCount() != mst.GetVertexCount()-1 {
-		return nil, errors.New("unable to form a valid MST")
+		return nil, 0
 	}
 
-	return mst, nil
+	return mst, 0
 }

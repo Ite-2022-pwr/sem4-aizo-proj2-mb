@@ -2,7 +2,8 @@ package myGraph
 
 import (
 	"container/heap"
-	"errors"
+	"projekt2/timeTrack"
+	"time"
 )
 
 // Priority Queue for Edges
@@ -32,7 +33,11 @@ func (pq *EdgePriorityQueue) Pop() interface{} {
 }
 
 // Prim's algorithm to find the Minimum Spanning Tree (MST) of a graph
-func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst Graph, err error) {
+func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst Graph, elapsed int64) {
+	startTime := time.Now()
+	defer func() {
+		elapsed = timeTrack.TimeTrack(startTime, "Prim")
+	}()
 	// Step 1: Initialize the MST based on the desired representation
 	if incidenceOrPredecessor {
 		mst = NewIncidenceMatrix()
@@ -80,9 +85,9 @@ func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst G
 	// Step 5: Ensure the resulting MST is valid
 	for _, in := range inMST {
 		if !in {
-			return nil, errors.New("unable to form a valid MST")
+			return nil, 0
 		}
 	}
 
-	return mst, nil
+	return mst, 0
 }

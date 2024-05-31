@@ -3,9 +3,15 @@ package myGraph
 import (
 	"fmt"
 	"math"
+	"projekt2/timeTrack"
+	"time"
 )
 
-func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding) {
+func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding, elapsed int64) {
+	startTime := time.Now()
+	defer func() {
+		elapsed = timeTrack.TimeTrack(startTime, "BellmanFord")
+	}()
 	vertexCount := graph.GetVertexCount()
 	verticesWithPredecessorsAndWeightToStart = make([]VertexPathfinding, vertexCount)
 
@@ -36,9 +42,9 @@ func BellmanFord(graph Graph, start int) (verticesWithPredecessorsAndWeightToSta
 	for _, edge := range edges {
 		if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart+edge.Weight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
 			fmt.Println("Graph contains a negative-weight cycle")
-			return nil
+			return nil, 0
 		}
 	}
 
-	return verticesWithPredecessorsAndWeightToStart
+	return verticesWithPredecessorsAndWeightToStart, 0
 }

@@ -2,10 +2,16 @@ package myGraph
 
 import (
 	"math"
+	"projekt2/timeTrack"
+	"time"
 )
 
 // Dijkstra's algorithm to find the shortest paths from a start vertex to all other vertices in the graph
-func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding) {
+func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWeightToStart []VertexPathfinding, elapsed int64) {
+	startTime := time.Now()
+	defer func() {
+		elapsed = timeTrack.TimeTrack(startTime, "Dijkstra")
+	}()
 	// Step 1: Initialize the list to hold the pathfinding information for each vertex
 	vertexCount := inputGraph.GetVertexCount()
 	predecessorDistanceToStartList := make([]VertexPathfinding, vertexCount)
@@ -66,5 +72,5 @@ func Dijkstra(inputGraph Graph, startVertex int) (verticesWithPredecessorsAndWei
 	}
 
 	// Return the list of vertices with their shortest path information
-	return predecessorDistanceToStartList
+	return predecessorDistanceToStartList, 0
 }
