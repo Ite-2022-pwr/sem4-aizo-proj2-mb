@@ -18,6 +18,6 @@ func main() {
 	mst1, _ := myGraph.Kruskal(graph, true)
 	fmt.Println(mst1.ToString())
 	//
-	//mst2, _ := myGraph.Prim(graph, 0, true)
-	//fmt.Println(mst2.ToString())
+	mst2, _ := myGraph.Prim(graph, 0, true)
+	fmt.Println(mst2.ToString())
 }
