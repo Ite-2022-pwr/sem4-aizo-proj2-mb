@@ -32,19 +32,7 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 	for i := 0; i < vertexCount-1; i++ {
 		edges := graph.GetAllEdges()
 		for _, edge := range edges {
-			fmt.Println("Edge:", edge.Start, edge.End, edge.Weight, verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
-			log.Println("Edge:", edge.Start, edge.End, edge.Weight, verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
 			newWeight := verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart + edge.Weight
-			fmt.Println("d(", edge.Start, ") + w(", edge.Start, ",", edge.Weight, "):", verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, "+", edge.Weight, "=", newWeight)
-			log.Println("d(", edge.Start, ") + w(", edge.Start, ",", edge.Weight, "):", verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart, "+", edge.Weight, "=", newWeight)
-			if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart == math.MaxInt32 {
-				fmt.Println("Vertex", edge.Start, "has not been visited yet")
-				log.Println("Vertex", edge.Start, "has not been visited yet")
-			}
-			fmt.Println("Checking vertex:", edge.End, "d(", edge.End, "):", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
-			log.Println("Checking vertex:", edge.End, "d(", edge.End, "):", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
-			fmt.Println("New weight:", newWeight, "<", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart, "? ", newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
-			log.Println("New weight:", newWeight, "<", verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart, "? ", newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart)
 			if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
 				verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart = newWeight
 				verticesWithPredecessorsAndWeightToStart[edge.End].Predecessor = edge.Start

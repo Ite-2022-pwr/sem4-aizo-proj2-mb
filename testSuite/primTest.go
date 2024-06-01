@@ -1,7 +1,10 @@
 package testSuite
 
 import (
+	"fmt"
+	"log"
 	"projekt2/myGraph"
+	"runtime/debug"
 )
 
 func SingleTestPrim(vertices, percentageConnected int) (avgIMTime, avgPLTime float64) {
@@ -22,10 +25,19 @@ func SingleTestPrim(vertices, percentageConnected int) (avgIMTime, avgPLTime flo
 	avgIMTime = 0
 	avgPLTime = 0
 	for i := 0; i < 10; i++ {
+		fmt.Println("Macierz incydencji:")
+		log.Println("Macierz incydencji:")
 		_, timeIM := myGraph.Prim(im, startVertex, true)
+		fmt.Println("--------------------------------")
+		log.Println("--------------------------------")
+		fmt.Println("Lista poprzedników:")
+		log.Println("Lista poprzedników:")
 		_, timePL := myGraph.Prim(pl, startVertex, false)
+		fmt.Println("--------------------------------")
+		log.Println("--------------------------------")
 		avgIMTime += float64(timeIM)
 		avgPLTime += float64(timePL)
+		debug.FreeOSMemory()
 	}
 	avgIMTime /= 10
 	avgPLTime /= 10
@@ -36,10 +48,11 @@ func PercentageTestPrim(percentageConnected int) (avgIMTimes, avgPLTimes map[int
 	avgIMTimes = make(map[int]float64)
 	avgPLTimes = make(map[int]float64)
 	for i := 0; i < 7; i++ {
-		vertices := 10 + i*10
+		vertices := 100 + i*100
 		avgIMTime, avgPLTime := SingleTestPrim(vertices, percentageConnected)
 		avgIMTimes[vertices] = avgIMTime
 		avgPLTimes[vertices] = avgPLTime
+		debug.FreeOSMemory()
 	}
 	return avgIMTimes, avgPLTimes
 }

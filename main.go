@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -10,21 +11,25 @@ import (
 
 func main() {
 
-	//save all logs to file
-	dateString := time.Now().Format("2006-01-02_15:04:05")
-	logFileName := dateString + ".log"
-	f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logToFilePTR := flag.Bool("logToFile", false, "Log to file")
 
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-	} else {
-		defer func(f *os.File) {
-			err := f.Close()
-			if err != nil {
-				fmt.Println("Error closing file:", err)
-			}
-		}(f)
-		log.SetOutput(f)
+	if logToFilePTR != nil && *logToFilePTR {
+		//save all logs to file
+		dateString := time.Now().Format("2006-01-02_15:04:05")
+		logFileName := dateString + ".log"
+		f, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+		if err != nil {
+			fmt.Println("Error opening file:", err)
+		} else {
+			defer func(f *os.File) {
+				err := f.Close()
+				if err != nil {
+					fmt.Println("Error closing file:", err)
+				}
+			}(f)
+			log.SetOutput(f)
+		}
 	}
 
 	testSuite.RunFullTests()

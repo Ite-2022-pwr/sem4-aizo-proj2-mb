@@ -45,21 +45,10 @@ func Dijkstra(inputGraph Graph, startVertex, endVertex int) (path *Path, elapsed
 		// Get all edges from the currently visiting vertex
 		availableEdges := inputGraph.GetAllEdgesFrom(visitingNow)
 
-		fmt.Println("Visiting now pointer index:", visitingNowPointer.Index)
-		log.Println("Visiting now pointer index:", visitingNowPointer.Index)
-		fmt.Println("Visiting now index:", visitingNow)
-		log.Println("Visiting now index:", visitingNow)
-
 		// Step 5: Relaxation step - update the shortest path estimates
 		for _, edge := range availableEdges {
 			newWeight := visitingNowPointer.WeightToStart + edge.Weight
 			checkingVertex := &predecessorDistanceToStartList[edge.End]
-			fmt.Println("d(", visitingNowPointer.Index, ") + w(", visitingNowPointer.Index, ",", edge.Weight, "):", visitingNowPointer.WeightToStart, "+", edge.Weight, "=", newWeight)
-			log.Println("d(", visitingNowPointer.Index, ") + w(", visitingNowPointer.Index, ",", edge.Weight, "):", visitingNowPointer.WeightToStart, "+", edge.Weight, "=", newWeight)
-			fmt.Println("Checking vertex:", checkingVertex.Index, "d(", checkingVertex.Index, "):", checkingVertex.WeightToStart)
-			log.Println("Checking vertex:", checkingVertex.Index, "d(", checkingVertex.Index, "):", checkingVertex.WeightToStart)
-			fmt.Println("New weight:", newWeight, "<", checkingVertex.WeightToStart, "? ", newWeight < checkingVertex.WeightToStart)
-			log.Println("New weight:", newWeight, "<", checkingVertex.WeightToStart, "? ", newWeight < checkingVertex.WeightToStart)
 			if newWeight < checkingVertex.WeightToStart {
 				checkingVertex.WeightToStart = newWeight
 				checkingVertex.Predecessor = visitingNow
@@ -98,8 +87,6 @@ func Dijkstra(inputGraph Graph, startVertex, endVertex int) (path *Path, elapsed
 			return nil, timeTrack.TimeTrack(startTime, "Dijkstra")
 		}
 		edgeWeight := inputGraph.GetEdgeWeight(predecessor, currentVertex)
-		fmt.Println("Adding edge to path:", predecessor, "->", currentVertex, "with weight", edgeWeight)
-		log.Println("Adding edge to path:", predecessor, "->", currentVertex, "with weight", edgeWeight)
 		path.AddEdge(Edge{Start: predecessor, End: currentVertex, Weight: edgeWeight})
 		currentVertex = predecessor
 	}
