@@ -9,19 +9,18 @@ import (
 )
 
 // GenerateRandomGraph creates a random graph with the specified vertex count, edge infill percentage, directionality, and graph type.
-func GenerateRandomGraph(vertices, percentageConnected int, directed, useIncidenceMatrix bool) Graph {
+func GenerateRandomGraph(vertices, percentageConnected int, directed bool) (im, pl Graph) {
 	defer timeTrack.TimeTrack(time.Now(), "GenerateRandomGraph")
-	var graph Graph
-	if useIncidenceMatrix {
-		graph = NewIncidenceMatrix()
-	} else {
-		graph = NewPredecessorList()
-	}
-	graph.SetDirected(directed)
 
+	im = NewIncidenceMatrix()
+	pl = NewPredecessorList()
+
+	im.SetDirected(directed)
+	pl.SetDirected(directed)
 	// Add vertices to the graph
 	for i := 0; i < vertices; i++ {
-		graph.AddVertex()
+		im.AddVertex()
+		pl.AddVertex()
 	}
 
 	// Calculate the maximum possible edges based on the graph being directed or not
@@ -45,8 +44,10 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed, useInciden
 	for edgesAdded < minEdges {
 		start := rand.Intn(vertices)
 		end := rand.Intn(vertices)
-		if start != end && connected[start] && !connected[end] && !graph.IsAdjacent(start, end) {
-			graph.AddEdge(start, end, rand.Intn(1000)+1)
+		if start != end && connected[start] && !connected[end] && !im.IsAdjacent(start, end) && !pl.IsAdjacent(start, end) {
+			newEdge := Edge{Start: start, End: end, Weight: rand.Intn(1000) + 1}
+			im.AddEdge(start, end, newEdge.Weight)
+			pl.AddEdge(start, end, newEdge.Weight)
 			connected[end] = true
 			edgesAdded++
 			fmt.Println("Edges added:", edgesAdded, " / Desired:", desiredEdges)
@@ -58,13 +59,15 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed, useInciden
 	for edgesAdded < desiredEdges {
 		start := rand.Intn(vertices)
 		end := rand.Intn(vertices)
-		if start != end && !graph.IsAdjacent(start, end) {
-			graph.AddEdge(start, end, rand.Intn(10)+1)
+		if start != end && !im.IsAdjacent(start, end) && !pl.IsAdjacent(start, end) {
+			newEdge := Edge{Start: start, End: end, Weight: rand.Intn(1000) + 1}
+			im.AddEdge(start, end, newEdge.Weight)
+			pl.AddEdge(start, end, newEdge.Weight)
 			edgesAdded++
 			fmt.Println("Edges added:", edgesAdded, " / Desired:", desiredEdges)
 			log.Println("Edges added:", edgesAdded, " / Desired:", desiredEdges)
 		}
 	}
 
-	return graph
+	return im, pl
 }

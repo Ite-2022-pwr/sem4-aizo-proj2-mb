@@ -9,9 +9,10 @@ import (
 )
 
 func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
+	name := fmt.Sprintf("Bellman-Ford, na grafie o %d wierzchołkach, reprezentacja: %s", graph.GetVertexCount(), graph.GetRepresentationName())
 	startTime := time.Now()
 	defer func() {
-		elapsed = timeTrack.TimeTrack(startTime, "BellmanFord")
+		elapsed = timeTrack.TimeTrack(startTime, name)
 	}()
 
 	vertexCount := graph.GetVertexCount()

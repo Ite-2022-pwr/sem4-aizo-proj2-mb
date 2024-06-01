@@ -18,4 +18,5 @@ type Graph interface {
 	GetEdgeWeight(int, int) int
 	SetEdgeWeight(int, int, int)
 	ToString() string
+	GetRepresentationName() string
 }

@@ -11,9 +11,10 @@ import (
 
 // Dijkstra's algorithm to find the shortest path from a start vertex to an end vertex in the graph
 func Dijkstra(inputGraph Graph, startVertex, endVertex int) (path *Path, elapsed int64) {
+	name := fmt.Sprintf("Dijkstra, na grafie o %d wierzchołkach, reprezentacja: %s", inputGraph.GetVertexCount(), inputGraph.GetRepresentationName())
 	startTime := time.Now()
 	defer func() {
-		elapsed = timeTrack.TimeTrack(startTime, "Dijkstra")
+		elapsed = timeTrack.TimeTrack(startTime, name)
 	}()
 
 	// Step 1: Initialize the list to hold the pathfinding information for each vertex

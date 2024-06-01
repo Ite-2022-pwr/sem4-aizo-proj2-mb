@@ -43,9 +43,10 @@ func (pq *EdgePriorityQueue) ToString() (out string) {
 
 // Prim's algorithm to find the Minimum Spanning Tree (MST) of a graph
 func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst Graph, elapsed int64) {
+	name := fmt.Sprintf("Prim, na grafie o %d wierzchołkach, reprezentacja: %s", inputGraph.GetVertexCount(), inputGraph.GetRepresentationName())
 	startTime := time.Now()
 	defer func() {
-		elapsed = timeTrack.TimeTrack(startTime, "Prim")
+		elapsed = timeTrack.TimeTrack(startTime, name)
 	}()
 	// Step 1: Initialize the MST based on the desired representation
 	if incidenceOrPredecessor {

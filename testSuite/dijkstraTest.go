@@ -11,18 +11,7 @@ import (
 func SingleTestDijkstra(vertices, percentageConnected int) (avgIMTime, avgPLTime float64) {
 	// Dijkstra's Algorithm
 	// Create a random graph
-	im := myGraph.GenerateRandomGraph(vertices, percentageConnected, true, true)
-	pl := myGraph.NewPredecessorList()
-	pl.SetDirected(true)
-	for i := 0; i < im.GetVertexCount(); i++ {
-		pl.AddVertex()
-	}
-	for _, edge := range im.GetAllEdges() {
-		if pl.IsAdjacent(edge.Start, edge.End) {
-			continue
-		}
-		pl.AddEdge(edge.Start, edge.End, edge.Weight)
-	}
+	im, pl := myGraph.GenerateRandomGraph(vertices, percentageConnected, true)
 
 	startVertex := 0
 

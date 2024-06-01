@@ -10,15 +10,7 @@ import (
 func SingleTestPrim(vertices, percentageConnected int) (avgIMTime, avgPLTime float64) {
 	// Prim's Algorithm
 	// Create a random graph
-	im := myGraph.GenerateRandomGraph(vertices, percentageConnected, false, true)
-	pl := myGraph.NewPredecessorList()
-	pl.SetDirected(false)
-	for i := 0; i < im.GetVertexCount(); i++ {
-		pl.AddVertex()
-	}
-	for _, edge := range im.GetAllEdges() {
-		pl.AddEdge(edge.Start, edge.End, edge.Weight)
-	}
+	im, pl := myGraph.GenerateRandomGraph(vertices, percentageConnected, false)
 
 	startVertex := 0
 

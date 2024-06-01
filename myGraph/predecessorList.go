@@ -187,3 +187,7 @@ func (pl *PredecessorList) ToString() (out string) {
 	}
 	return out
 }
+
+func (pl *PredecessorList) GetRepresentationName() string {
+	return "Predecessor List"
+}

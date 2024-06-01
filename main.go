@@ -11,9 +11,10 @@ import (
 
 func main() {
 
-	logToFilePTR := flag.Bool("logToFile", false, "Log to file")
+	logToFilePTR := flag.Bool("log-to-file", false, "Log to file")
+	flag.Parse()
 
-	if logToFilePTR != nil && *logToFilePTR {
+	if *logToFilePTR {
 		//save all logs to file
 		dateString := time.Now().Format("2006-01-02_15:04:05")
 		logFileName := dateString + ".log"

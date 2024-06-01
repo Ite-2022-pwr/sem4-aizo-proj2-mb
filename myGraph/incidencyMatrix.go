@@ -249,3 +249,7 @@ func (im *IncidenceMatrix) ToString() (out string) {
 	out += fmt.Sprintf("\n")
 	return out
 }
+
+func (im *IncidenceMatrix) GetRepresentationName() string {
+	return "Incidence Matrix"
+}
