@@ -116,7 +116,7 @@ func (pl *PredecessorList) GetAllEdges() (edges []Edge) {
 	edges = make([]Edge, 0)
 	for i := 0; i < pl.GetVertexCount(); i++ {
 		for j := 0; j < len(pl.PredecessorList[i]); j++ {
-			edge := pl.GetEdge(i, pl.PredecessorList[i][j].Vertex)
+			edge := pl.GetEdge(pl.PredecessorList[i][j].Vertex, i)
 			if !edge.isInList(edges, pl.IsDirected()) {
 				edges = append(edges, edge)
 			}
