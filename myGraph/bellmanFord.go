@@ -32,12 +32,19 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 	// Relax edges repeatedly
 	for i := 0; i < vertexCount-1; i++ {
 		edges := graph.GetAllEdges()
+		noImprovements := true
 		for _, edge := range edges {
 			newWeight := verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart + edge.Weight
 			if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && newWeight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
 				verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart = newWeight
 				verticesWithPredecessorsAndWeightToStart[edge.End].Predecessor = edge.Start
+				noImprovements = false
 			}
+		}
+		if noImprovements {
+			log.Println("No improvements made on iteration", i+1)
+			fmt.Println("No improvements made on iteration", i+1)
+			break
 		}
 	}
 

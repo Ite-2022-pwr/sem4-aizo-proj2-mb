@@ -16,7 +16,7 @@ func SingleTestPrim(vertices, percentageConnected int) (avgIMTime, avgPLTime flo
 
 	avgIMTime = 0
 	avgPLTime = 0
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 5; i++ {
 		fmt.Println("Macierz incydencji:")
 		log.Println("Macierz incydencji:")
 		_, timeIM := myGraph.Prim(im, startVertex, true)
@@ -31,8 +31,8 @@ func SingleTestPrim(vertices, percentageConnected int) (avgIMTime, avgPLTime flo
 		avgPLTime += float64(timePL)
 		debug.FreeOSMemory()
 	}
-	avgIMTime /= 10
-	avgPLTime /= 10
+	avgIMTime /= 5
+	avgPLTime /= 5
 	return avgIMTime, avgPLTime
 }
 

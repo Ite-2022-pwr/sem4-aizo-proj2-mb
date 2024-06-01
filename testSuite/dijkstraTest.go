@@ -17,7 +17,7 @@ func SingleTestDijkstra(vertices, percentageConnected int) (avgIMTime, avgPLTime
 
 	avgIMTime = 0
 	avgPLTime = 0
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 5; i++ {
 		randomEndVertex := rand.Intn(vertices - 1)
 		fmt.Println("Macierz incydencji:")
 		log.Println("Macierz incydencji:")
@@ -33,8 +33,8 @@ func SingleTestDijkstra(vertices, percentageConnected int) (avgIMTime, avgPLTime
 		avgPLTime += float64(timePL)
 		debug.FreeOSMemory()
 	}
-	avgIMTime /= 10
-	avgPLTime /= 10
+	avgIMTime /= 5
+	avgPLTime /= 5
 	return avgIMTime, avgPLTime
 }
 
