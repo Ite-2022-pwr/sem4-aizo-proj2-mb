@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"projekt2/testSuite"
+	"projekt2/menu"
 	"time"
 )
 
@@ -33,7 +33,7 @@ func main() {
 		}
 	}
 
-	testSuite.RunFullTests()
+	menu.MainMenu()
 
 	//vertices := 100
 	//percentageConnected := 25

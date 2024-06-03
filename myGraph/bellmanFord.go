@@ -30,8 +30,8 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 	verticesWithPredecessorsAndWeightToStart[start].WeightToStart = 0
 
 	// Relax edges repeatedly
+	edges := graph.GetAllEdges()
 	for i := 0; i < vertexCount-1; i++ {
-		edges := graph.GetAllEdges()
 		noImprovements := true
 		for _, edge := range edges {
 			newWeight := verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart + edge.Weight
@@ -49,7 +49,6 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 	}
 
 	// Check for negative-weight cycles
-	edges := graph.GetAllEdges()
 	for _, edge := range edges {
 		if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart+edge.Weight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
 			fmt.Println("Graph contains a negative-weight cycle")
