@@ -7,52 +7,52 @@ import (
 	"time"
 )
 
-// Kruskal algorithm to find the Minimum Spanning Tree (MST) of a graph
+// algorytm kruskala do znajdowania minimalnego drzewa rozpinającego
 func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, elapsed int64) {
 	name := fmt.Sprintf("Kruskal, na grafie o %d wierzchołkach, reprezentacja: %s", inputGraph.GetVertexCount(), inputGraph.GetRepresentationName())
 	startTime := time.Now()
 	defer func() {
 		elapsed = timeTrack.TimeTrack(startTime, name)
 	}()
-	// Step 1: Sort all edges in the input graph by weight in non-decreasing order
+	// sortowanie krawędzi niemalejąco
 	sortedEdges := SortEdgesListQS(inputGraph.GetAllEdges())
 
-	// Step 2: Initialize the MST based on the desired representation
+	// inicializacja grafu wynikowego
 	if outputIncidenceOrPredecessor {
 		mst = NewIncidenceMatrix()
 	} else {
 		mst = NewPredecessorList()
 	}
 
-	// Add all vertices to the MST graph
+	// dodanie wierzchołków do grafu wynikowego
 	for i := 0; i < inputGraph.GetVertexCount(); i++ {
 		mst.AddVertex()
 	}
 
-	// Step 3: Create a map to track the connected components of each vertex
+	// utworzenie mapy wierzchołków
 	verticesMap := make(map[int]int)
 	for i := 0; i < mst.GetVertexCount(); i++ {
 		verticesMap[i] = i
 	}
 
-	// List to keep track of connected vertices
+	// lista wierzchołków połączonych
 	connected := make([]int, 0)
 
-	// Step 4: Iterate over sorted edges and add them to the MST if they don't form a cycle
+	// iteracja po krawędziach i dodawanie ich do drzewa jeśli nie tworzą cyklu
 	for _, edge := range sortedEdges {
-		// Stop if we have enough edges to form a spanning tree
+		// jeżeli wszystkie wierzchołki są już połączone to kończymy
 		if len(connected) == mst.GetVertexCount() {
 			break
 		}
 		start := edge.Start
 		end := edge.End
 
-		// Check if the current edge forms a cycle
+		// sprawdzenie czy krawędź nie tworzy cyklu
 		if start != end && !mst.IsAdjacent(start, end) && verticesMap[start] != verticesMap[end] {
-			// Add edge to the MST
+			// dodanie krawędzi do drzewa
 			mst.AddEdge(start, end, edge.Weight)
 
-			// Update the connected components map
+			// aktualizacja mapy wierzchołków
 			oldComponent := verticesMap[start]
 			newComponent := verticesMap[end]
 			for vertex, component := range verticesMap {
@@ -61,7 +61,7 @@ func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, el
 				}
 			}
 
-			// Add vertices to the connected list
+			// dodanie wierzchołków do listy połączonych
 			if !utils.InListInt(connected, end) {
 				connected = append(connected, end)
 			}
@@ -71,7 +71,7 @@ func Kruskal(inputGraph Graph, outputIncidenceOrPredecessor bool) (mst Graph, el
 		}
 	}
 
-	// Step 5: Ensure the resulting MST is valid
+	// sprawdzenie czy udało się połączyć wszystkie wierzchołki
 	if len(connected) != mst.GetVertexCount() && mst.GetEdgeCount() != mst.GetVertexCount()-1 {
 		return nil, 0
 	}

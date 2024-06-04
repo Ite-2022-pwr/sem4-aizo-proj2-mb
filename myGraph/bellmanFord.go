@@ -18,7 +18,7 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 	vertexCount := graph.GetVertexCount()
 	verticesWithPredecessorsAndWeightToStart := make([]VertexPathfinding, vertexCount)
 
-	// Initialize the pathfinding list
+	// inicjalizacja listy dla wyszukiwania najkrótszej ścieżki
 	for i := 0; i < vertexCount; i++ {
 		verticesWithPredecessorsAndWeightToStart[i] = VertexPathfinding{
 			Index:         i,
@@ -29,7 +29,7 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 	}
 	verticesWithPredecessorsAndWeightToStart[start].WeightToStart = 0
 
-	// Relax edges repeatedly
+	// relaksacja krawędzi
 	edges := graph.GetAllEdges()
 	for i := 0; i < vertexCount-1; i++ {
 		noImprovements := true
@@ -48,7 +48,7 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 		}
 	}
 
-	// Check for negative-weight cycles
+	// sprawdzenie czy graf zawiera ujemny cykl
 	for _, edge := range edges {
 		if verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart != math.MaxInt32 && verticesWithPredecessorsAndWeightToStart[edge.Start].WeightToStart+edge.Weight < verticesWithPredecessorsAndWeightToStart[edge.End].WeightToStart {
 			fmt.Println("Graph contains a negative-weight cycle")
@@ -57,13 +57,13 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 		}
 	}
 
-	// Construct the path from start to end
+	// tworzenie ścieżki
 	path = NewPath()
 	currentVertex := end
 	for currentVertex != start {
 		predecessor := verticesWithPredecessorsAndWeightToStart[currentVertex].Predecessor
 		if predecessor == -1 {
-			// If no predecessor is found, it means there is no path
+			// jeżei nie ma ścieżki z start do end
 			fmt.Println("No path found from", start, "to", end)
 			log.Println("No path found from", start, "to", end)
 			return nil, timeTrack.TimeTrack(startTime, "BellmanFord")
@@ -75,16 +75,16 @@ func BellmanFord(graph Graph, start, end int) (path *Path, elapsed int64) {
 		currentVertex = predecessor
 	}
 
-	// Reverse the edges to get the path from start to end
+	// odwrócenie krawędzi aby uzyskać ścieżkę od start do end
 	for i, j := 0, len(path.Edges)-1; i < j; i, j = i+1, j-1 {
 		path.Edges[i], path.Edges[j] = path.Edges[j], path.Edges[i]
 	}
 
-	// Log the final path
+	// wyświetlenie ścieżki
 	pathString := path.ToString()
 	fmt.Println(pathString)
 	log.Println(pathString)
 
-	// Return the path and the elapsed time
+	// zwrócenie ścieżki i czasu wykonania
 	return path, 0
 }

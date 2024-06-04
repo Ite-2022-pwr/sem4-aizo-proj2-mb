@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// GenerateRandomGraph creates a random graph with the specified vertex count, edge infill percentage, directionality, and graph type.
+// wygeneruj graf losowy
 func GenerateRandomGraph(vertices, percentageConnected int, directed bool) (im, pl Graph) {
 	defer timeTrack.TimeTrack(time.Now(), "GenerateRandomGraph")
 
@@ -17,26 +17,26 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed bool) (im, 
 
 	im.SetDirected(directed)
 	pl.SetDirected(directed)
-	// Add vertices to the graph
+	// dodanie krawędzi
 	for i := 0; i < vertices; i++ {
 		im.AddVertex()
 		pl.AddVertex()
 	}
 
-	// Calculate the maximum possible edges based on the graph being directed or not
+	// obliczenie maksymalnej ilości krawędzi
 	maxEdges := vertices * (vertices - 1)
 	if !directed {
 		maxEdges /= 2
 	}
 
-	// Calculate the desired number of edges based on the percentage connected
+	// oblizenie ilości krawędzi do dodania
 	desiredEdges := maxEdges * percentageConnected / 100
 	minEdges := vertices - 1
 	if desiredEdges < minEdges {
 		desiredEdges = minEdges
 	}
 
-	// Ensure the graph is connected using a MST approach
+	// upewnienie się, że graf jest spójny
 	connected := make([]bool, vertices)
 	connected[0] = true
 	edgesAdded := 0
@@ -55,7 +55,7 @@ func GenerateRandomGraph(vertices, percentageConnected int, directed bool) (im, 
 		}
 	}
 
-	// Add additional random edges to meet the desired edge count
+	// dodanie pozostałych krawędzi
 	for edgesAdded < desiredEdges {
 		start := rand.Intn(vertices)
 		end := rand.Intn(vertices)

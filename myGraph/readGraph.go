@@ -8,17 +8,14 @@ import (
 	"strings"
 )
 
-// ReadFromFile reads a graph from a file and returns it as a Graph interface.
-// The directed argument determines if the graph should be treated as directed or undirected.
+// odczytywanie z pliku
 func ReadFromFile(filename string, directed bool, useIncidenceMatrix bool) (Graph, error) {
-	// Open the file for reading
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
-	// Initialize the graph based on the type
 	var graph Graph
 	if useIncidenceMatrix {
 		graph = NewIncidenceMatrix()
@@ -29,7 +26,6 @@ func ReadFromFile(filename string, directed bool, useIncidenceMatrix bool) (Grap
 
 	scanner := bufio.NewScanner(file)
 
-	// Read the number of vertices and edges
 	if !scanner.Scan() {
 		return nil, fmt.Errorf("file is empty or invalid format")
 	}
@@ -46,12 +42,10 @@ func ReadFromFile(filename string, directed bool, useIncidenceMatrix bool) (Grap
 		return nil, fmt.Errorf("invalid edge count")
 	}
 
-	// Add vertices to the graph
 	for i := 0; i < vertices; i++ {
 		graph.AddVertex()
 	}
 
-	// Read each edge
 	for i := 0; i < edges; i++ {
 		if !scanner.Scan() {
 			return nil, fmt.Errorf("unexpected end of file")

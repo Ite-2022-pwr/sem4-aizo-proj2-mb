@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Priority Queue for Edges
+// Kolejka priorytetowa dla krawędzi
 type EdgePriorityQueue []*Edge
 
 func (pq EdgePriorityQueue) Len() int { return len(pq) }
@@ -41,14 +41,14 @@ func (pq *EdgePriorityQueue) ToString() (out string) {
 	return out
 }
 
-// Prim's algorithm to find the Minimum Spanning Tree (MST) of a graph
+// algorithm Prim do znajdowania minimalnego drzewa rozpinającego
 func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst Graph, elapsed int64) {
 	name := fmt.Sprintf("Prim, na grafie o %d wierzchołkach, reprezentacja: %s", inputGraph.GetVertexCount(), inputGraph.GetRepresentationName())
 	startTime := time.Now()
 	defer func() {
 		elapsed = timeTrack.TimeTrack(startTime, name)
 	}()
-	// Step 1: Initialize the MST based on the desired representation
+	// inicializacja grafu wynikowego
 	if incidenceOrPredecessor {
 		mst = NewIncidenceMatrix()
 	} else {
@@ -60,29 +60,29 @@ func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst G
 		mst.AddVertex()
 	}
 
-	// Step 2: Create a priority queue to store the edges
+	// utworzenie kolejki priorytetowej dla krawędzi
 	pq := &EdgePriorityQueue{}
 	heap.Init(pq)
 
-	// Step 3: Track the vertices that have been added to the MST
+	// lista do sprawdzania czy wierzchołek jest już w MST
 	inMST := make([]bool, verticesCount)
 	inMST[startVertex] = true
 
-	// Add all edges from the start vertex to the priority queue
+	// dodać wszystkie krawędzie wychodzące z wierzchołka startowego do kolejki priorytetowej
 	for _, edge := range inputGraph.GetAllEdgesFrom(startVertex) {
 		heap.Push(pq, &edge)
 	}
 
-	// Step 4: Process the edges in the priority queue
+	// przetwarzanie krawędzi
 	for pq.Len() > 0 {
-		// Extract the edge with the minimum weight
+		// wybierz krawędź o najmniejszej wadze
 		minEdge := heap.Pop(pq).(*Edge)
 		if !inMST[minEdge.End] {
-			// If the end vertex is not in the MST, add the edge to the MST
+			// jeżeli wierzchołek końcowy nie jest w MST to dodaj krawędź do MST
 			mst.AddEdge(minEdge.Start, minEdge.End, minEdge.Weight)
 			inMST[minEdge.End] = true
 
-			// Add all edges from the newly added vertex to the priority queue
+			// dodaj wszystkie krawędzie wychodzące z wierzchołka końcowego do kolejki priorytetowej
 			for _, edge := range inputGraph.GetAllEdgesFrom(minEdge.End) {
 				if !inMST[edge.End] {
 					heap.Push(pq, &edge)
@@ -91,7 +91,7 @@ func Prim(inputGraph Graph, startVertex int, incidenceOrPredecessor bool) (mst G
 		}
 	}
 
-	// Step 5: Ensure the resulting MST is valid
+	// sprawdzenie czy MST zawiera wszystkie wierzchołki
 	for _, in := range inMST {
 		if !in {
 			return nil, 0
